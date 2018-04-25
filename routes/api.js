@@ -1,12 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
-/* Fake Database */
-var JsonDB = require('node-json-db');
-// The second argument is used to tell the DB to save after each push
-// If you put false, you'll have to call the save() method.
-// The third argument is to ask JsonDB to save the database in an human readable format. (default false)
-var db = new JsonDB("database", true, true);
+// set-up database
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/m2w');
+var db = mongoose.connection;
+
+// check connection
+db.once('open', function () {
+    console.log('Connected to MongoDB');
+});
+
+db.on('error', function (err) {
+    console.log(err);
+});
+
+// bring in model
+var Message = require('../database/models/message');
+
 
 /* Default GET */
 router.get('/', function(req,res, next) {
@@ -15,27 +26,73 @@ router.get('/', function(req,res, next) {
 
 /* GET all messages. */
 router.get('/messages', function(req, res, next) {
-  res.json(db.getData('/messages'));
+  Message.find({}, (err, messages) => {
+    if (err) {
+      console.log('ERROR /!\\ : ');
+      console.log(err);
+      res.send(err);
+    }
+    else {
+      res.json(messages);
+    }
+  });
 });
 
 /* POST one message */
 router.post('/message', function(req, res, next) {
-  try {
-    db.push('/messages[]', req.body);
-    res.json(db.getData('/messages'));
-  } catch (e) {
-    console.error(e);
-  }
+  var message = new Message();
+  message.content = req.body.content;
+  message.author = req.body.author;
+
+  // save message to db
+  message.save(err => {
+    // check if it works
+    // if it doesn't, send the error
+    if (err) {
+      console.log(err);
+      res.send(err);
+    }
+    // if it does, send the messages
+    else {
+      Message.find({}, (err, messages) => {
+        if (err) {
+          console.log('ERROR /!\\ : ');
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.json(messages);
+        }
+      });
+    }
+  });
 });
 
 /* DELETE message with id */
 router.delete('/message/:id', function(req, res, next) {
-  try {
-    db.delete('/messages[' + req.params.id + ']');
-    res.json(db.getData('/messages'));
-  } catch (e) {
-    console.error(e);
-  }
+  var query = {_id: req.params.id};
+
+  Message.remove(query, err => {
+    // check if it works
+    // if it doesn't, send the error
+    if (err) {
+      console.log(err);
+      res.send(err);
+    }
+    // if it does, send the messages
+    else {
+      Message.find({}, (err, messages) => {
+        if (err) {
+          console.log('ERROR /!\\ : ');
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.json(messages);
+        }
+      });
+    }
+  });
 });
   
 
