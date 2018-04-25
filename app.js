@@ -9,8 +9,8 @@ var apiRouter = require('./routes/api');
 var app = express();
 
 // for dev only
-// var cors = require('cors');
-// app.use(cors());
+var cors = require('cors');
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());
