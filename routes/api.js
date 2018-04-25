@@ -3,7 +3,7 @@ var router = express.Router();
 
 // set-up database
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/m2w');
+mongoose.connect('mongodb://bart:20BarT01@ds255329.mlab.com:55329/m2w');
 var db = mongoose.connection;
 
 // check connection
