@@ -10,7 +10,7 @@ var db = new JsonDB("database", true, true);
 
 /* Default GET */
 router.get('/', function(req,res, next) {
-  res.send('Please go to /api/messages to get messages');
+  res.send('M2W: Please go to /api/messages to get messages');
 });
 
 /* GET all messages. */
