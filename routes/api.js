@@ -1,22 +1,29 @@
 var express = require('express');
 var router = express.Router();
 
-// set-up database
+/* SET UP DATABASE */
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://bart:20BarT01@ds255329.mlab.com:55329/m2w');
 var db = mongoose.connection;
 
 // check connection
 db.once('open', function () {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB Messages');
 });
 
 db.on('error', function (err) {
     console.log(err);
 });
 
-// bring in model
+// bring in models
 var Message = require('../database/models/message');
+
+
+
+
+
+
+
 
 
 /* Default GET */
