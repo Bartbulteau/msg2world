@@ -1,0 +1,12 @@
+{
+    "messages": [
+        {
+            "content": "This app has been made with Vue JS in the front-end and Express JS in the back-end",
+            "author": "Barthélémy Bulteau"
+        },
+        {
+            "content": "Hello World !",
+            "author": "Bart Bulteau"
+        }
+    ]
+}
