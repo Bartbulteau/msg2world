@@ -34,11 +34,6 @@ io.sockets.on('connection', function (socket) {
       socket.broadcast.emit('update');
       console.log('updating clients')
     });	
-    // when admin removes a msg, we update all clients
-    socket.on('message_removed', function () {
-      socket.broadcast.emit('update');
-      console.log('updating clients');
-    });
 });
 
 
