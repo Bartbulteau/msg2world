@@ -21,6 +21,23 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+/* SOCKET IO */
+// Chargement de socket.io
+var io = require('socket.io').listen(server);
+
+// Quand un client se connecte, on le note dans la console
+io.sockets.on('connection', function (socket) {
+    console.log('New client : ' + socket.id);
+
+    // when a client sends a new msg, we update all clients
+    socket.on('new_message', function () {
+      socket.broadcast.emit('update');
+      console.log('updating clients')
+    });	
+});
+
+
+
 /**
  * Listen on provided port, on all network interfaces.
  */
